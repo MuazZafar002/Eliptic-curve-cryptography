@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="ecc.js"></script>
+    <title>ECC Encryption and Decryption</title>
+</head>
+<body>
+    <div class="container">
+        <h1>ECC Encryption and Decryption</h1>
+        <div class="section">
+            <h2>Key Generation</h2>
+            <button id="key-gen-btn">Generate Keys</button>
+            <div id="key-results" class="hidden">
+                <p><strong>Public Key:</strong> <span id="public-key"></span></p>
+                <p><strong>Private Key:</strong> <span id="private-key"></span></p>
+            </div>
+        </div>
+        <div class="section">
+            <h2>Encryption</h2>
+            <label for="encrypt-plain">Plain Text:</label>
+            <input type="text" id="encrypt-plain">
+            <button id="encrypt-btn">Encrypt</button>
+            <div id="encryption-results" class="hidden">
+                <p><strong>Cipher Text:</strong> <span id="encrypt-cipher"></span></p>
+            </div>
+        </div>
+        <div class="section">
+            <h2>Decryption</h2>
+            <label for="decrypt-cipher">Cipher Text:</label>
+            <input type text id="decrypt-cipher">
+            <button id="decrypt-btn">Decrypt</button>
+            <div id="decryption-results" class="hidden">
+                <p><strong>Decrypted Text:</strong> <span id="decrypt-plain"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let object = new eliptic_curve();
+
+        $(document).ready(function () {
+            $("#key-gen-btn").click(async () => {
+                await object.genrate_Keys();
+                $("#public-key").text(object.publicKeyhold.d);
+                $("#private-key").text(object.privateKeyhold.x);
+                $("#key-results").removeClass("hidden");
+            });
+
+            $("#encrypt-btn").click(async () => {
+                if (object.keydata === undefined) {
+                    return;
+                }
+
+                let m = $("#encrypt-plain").val();
+                let m1 = await object.encryption(m);
+                $("#encrypt-cipher").text(m1);
+                $("#encryption-results").removeClass("hidden");
+            });
+
+            $("#decrypt-btn").click(async () => {
+                if (object.keydata === undefined) {
+                    return;
+                }
+
+                let m1 = $("#decrypt-cipher").val();
+                let m = await object.decryption(m1);
+                $("#decrypt-plain").text(m);
+                $("#decryption-results").removeClass("hidden");
+            });
+        });
+    </script>
+</body>
+</html>
